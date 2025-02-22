@@ -5,17 +5,14 @@ pragma solidity ^0.8.18;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import {PriceConverter} from "./PriceConverter.sol";
 
-
 error NotOwner();
 
 contract FundMe {
     mapping(address => uint256) private s_addressToAmountFunded;
     address[] private s_funders;
     AggregatorV3Interface private s_priceFeed;
+
     using PriceConverter for uint256;
-    
-    
-    
 
     // Could we make this constant?  /* hint: no! We should make it immutable! */
     address private /* immutable */ i_owner;
@@ -71,28 +68,23 @@ contract FundMe {
         s_funders = new address[](0);
         (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
-
     }
 
-
-
-    function getAddressToAmountFunded(address fundingAddress) public view returns(uint256) {
+    function getAddressToAmountFunded(address fundingAddress) public view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress];
     }
 
-
-    function getFunder(uint256 index) public view returns(address) {
+    function getFunder(uint256 index) public view returns (address) {
         return s_funders[index];
     }
 
-    function getOwner() public view returns(address) {
+    function getOwner() public view returns (address) {
         return i_owner;
     }
 
-    function getPriceFeed() public view returns(AggregatorV3Interface) {
+    function getPriceFeed() public view returns (AggregatorV3Interface) {
         return s_priceFeed;
     }
-
 
     // Explainer from: https://solidity-by-example.org/fallback/
     // Ether is sent to contract

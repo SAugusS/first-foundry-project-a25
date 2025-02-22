@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.18;
+
 import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../../src/FundMe.sol";
 import {DeployFundMe} from "../../script/DeployFundMe.s.sol";
@@ -87,21 +88,14 @@ contract FundMeTest is Test {
         uint256 enddingFundMeBalance = address(fundMe).balance;
         uint256 endingOwnerBalance = fundMe.getOwner().balance;
         assertEq(enddingFundMeBalance, 0);
-        assertEq(
-            startingFundmeBalance + startingOwnerBalance,
-            endingOwnerBalance
-        );
+        assertEq(startingFundmeBalance + startingOwnerBalance, endingOwnerBalance);
     }
 
     function testWithdrawFromMultipleFunders() public funded {
         uint160 numberOfFunders = 10;
         uint160 startingFunderIndex = 1;
 
-        for (
-            uint160 i = startingFunderIndex;
-            i < numberOfFunders + startingFunderIndex;
-            i++
-        ) {
+        for (uint160 i = startingFunderIndex; i < numberOfFunders + startingFunderIndex; i++) {
             hoax(address(i), SEND_VALUE);
             fundMe.fund{value: SEND_VALUE}();
         }
@@ -114,13 +108,8 @@ contract FundMeTest is Test {
 
         uint256 endingOwnerBalance = fundMe.getOwner().balance;
         assert(address(fundMe).balance == 0);
-        assert(
-            startingFundMeBalance + startingOwnerBalance == endingOwnerBalance
-        );
-        assert(
-            (numberOfFunders + 1) * SEND_VALUE ==
-                endingOwnerBalance - startingOwnerBalance
-        );
+        assert(startingFundMeBalance + startingOwnerBalance == endingOwnerBalance);
+        assert((numberOfFunders + 1) * SEND_VALUE == endingOwnerBalance - startingOwnerBalance);
     }
 
     function testPrintStorageData() public view {
@@ -136,11 +125,7 @@ contract FundMeTest is Test {
         uint160 numberOfFunders = 10;
         uint160 startingFunderIndex = 1;
 
-        for (
-            uint160 i = startingFunderIndex;
-            i < numberOfFunders + startingFunderIndex;
-            i++
-        ) {
+        for (uint160 i = startingFunderIndex; i < numberOfFunders + startingFunderIndex; i++) {
             hoax(address(i), SEND_VALUE);
             fundMe.fund{value: SEND_VALUE}();
         }
@@ -153,12 +138,7 @@ contract FundMeTest is Test {
 
         uint256 endingOwnerBalance = fundMe.getOwner().balance;
         assert(address(fundMe).balance == 0);
-        assert(
-            startingFundMeBalance + startingOwnerBalance == endingOwnerBalance
-        );
-        assert(
-            (numberOfFunders + 1) * SEND_VALUE ==
-                endingOwnerBalance - startingOwnerBalance
-        );
+        assert(startingFundMeBalance + startingOwnerBalance == endingOwnerBalance);
+        assert((numberOfFunders + 1) * SEND_VALUE == endingOwnerBalance - startingOwnerBalance);
     }
 }
